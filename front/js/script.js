@@ -22,22 +22,6 @@ fetch("http://localhost:3000/api/products")
 			"<p class=\"productDescription\">"+product_description+"</p>" +
 			"</article>" +
 			"</a>";
-			//insertion des différents attributs dans la partie html correspondant
-			// let listeNoms = document.getElementsByClassName('productName');
-			// (listeNoms[0]).innerHTML =  product_name;
-
-			// let listeDescription = document.getElementsByClassName('productDescription');
-			// (listeDescription[0]).innerHTML =  product_description;
-
-			// let listeImages = document.querySelector("article");
-			// let image = listeImages.getElementsByTagName("img");
-			// (image[0]).src = product_url;
-			// (image[0]).alt = product_alt;
-			// let item_class = document.getElementsByClassName('items');
-			// let listLinks = item_class[0].querySelector("a")
-			// listLinks.href = "./product.html?id=" + product_id;
-			//console.log(listLinks.href);
-			//console.log(value[i].price);
 		}
 		document.getElementsByClassName("items")[0].innerHTML = contenu;
 	})
