@@ -15,7 +15,7 @@ fetch("http://localhost:3000/api/products")
 			let product_alt = value[i].altTxt;
 			let product_id = value[i]._id;	
 			contenu = contenu +
-			"<a href=\"./product.html?id=\""+product_id+"\">" +
+			"<a href=\"./product.html?id="+product_id+"\">" +
 			"<article>" +
 			"<img src= \""+product_url+"\" alt= \""+product_description+"\">" +
 			"<h3 class=\"productName\">"+product_name+"</h3>" +
