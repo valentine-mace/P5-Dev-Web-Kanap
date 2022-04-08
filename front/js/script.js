@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products")
 			contenu = contenu +
 			"<a href=\"./product.html?id="+product_id+"\">" +
 			"<article>" +
-			"<img src= \""+product_url+"\" alt= \""+product_description+"\">" +
+			"<img src= \""+product_url+"\" alt= \""+product_alt+"\">" +
 			"<h3 class=\"productName\">"+product_name+"</h3>" +
 			"<p class=\"productDescription\">"+product_description+"</p>" +
 			"</article>" +
