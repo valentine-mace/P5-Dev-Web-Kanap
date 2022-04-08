@@ -6,8 +6,9 @@ fetch("http://localhost:3000/api/products")
 		}
 	})
 	.then(function(value){
-		let donnees = value[0];
-		console.log(donnees);
+		for (var i = 0; i < value.length; i++){
+			console.log(value[i].price);
+		}
 	})
 	.catch(function(err){
 		console.log("erreur");
