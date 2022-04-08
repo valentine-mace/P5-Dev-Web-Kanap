@@ -44,11 +44,3 @@ fetch("http://localhost:3000/api/products")
 	.catch(function(err){
 		console.log("erreur");
 	});
-
-
-//récupérer données par catégorie: ici, seulement nom, description, id et image
-
-//récupérer id,nom, image et description dans html
-
-//insérer données API dans ID html
-
