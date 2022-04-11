@@ -4,7 +4,12 @@ let objJson = JSON.parse(get_panier);
 
 let contenu = "";
 
-objJson.forEach(element => {
+let prix_total = 0;
+let product_price = 0;
+let total_produits = 0;
+
+objJson.forEach(element => 
+{
   
   //on récupère les autres données du produit à partir de l'id
   fetch("http://localhost:3000/api/products/" + element.produit_id)
@@ -45,15 +50,13 @@ objJson.forEach(element => {
       "</div>" +
       "</article>"
 
-     console.log(contenu);
-
-     document.getElementById("cart__items").innerHTML = contenu;
+      document.getElementById("cart__items").innerHTML = contenu;
 
     })
 
-    
-
 });
+
+
 
 
 
