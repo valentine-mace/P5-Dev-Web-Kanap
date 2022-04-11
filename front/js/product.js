@@ -36,7 +36,6 @@ fetch("http://localhost:3000/api/products/" + id)
 
 //créer array pour panier 
 let panier = [];
-console.log(localStorage);
 
 //clic sur le bouton
 document.getElementById('addToCart').onclick = function() 
@@ -58,21 +57,26 @@ document.getElementById('addToCart').onclick = function()
 			produit_couleur : couleur,
 			produit_quantite : quantite
 		};
-		//on vérifie que dans le local storage l'id est existant
-		let get_panier = localStorage.getItem("obj");
-		let objJson = JSON.parse(get_panier);
 		//on vérifie que le panier n'est pas vide
-		if (localStorage.length !== 0){
+		if (localStorage.length != 0){
+			//on vérifie que dans le local storage l'id est existant
+			let get_panier = localStorage.getItem("obj");
+			let objJson = JSON.parse(get_panier);
+			console.log(localStorage);
 			objJson.forEach(element => {
-					if((element.produit_id == id) && (element.produit_couleur == couleur)){
+					if((element.produit_id === id) && (element.produit_couleur === couleur)){
 						element.produit_quantite = Number(element.produit_quantite) + Number(quantite);
 						console.log(element.produit_quantite);
+						console.log("duplicat");
+						console.log(localStorage);
+						// prob ici
 					}
 					else{
 						panier.push(produit_selectionne);
 						let produit_json = JSON.stringify(panier);
 						localStorage.setItem("obj",produit_json);
 						console.log(localStorage);
+						console.log("nouveau");
 					}
 				}
 			);
