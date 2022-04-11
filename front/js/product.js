@@ -41,10 +41,11 @@ let panier = [];
 document.getElementById('addToCart').onclick = function() 
 {
 	//récupérer quantité et couleur
-	let quantite = document.getElementById('quantity').value;
+	let newQuantite = document.getElementById('quantity').value;
 	let couleur = document.querySelector('select[name="color-select"]').value;
+	console.log("couleur récupérée:", couleur);
 	//vérifier qu'au moins une couleur et un produit ont été sélectionnés
-	if(quantite == 0){
+	if(newQuantite == 0){
 		alert("Vous devez sélectionner au moins un produit.");
 	}
 	if(couleur == 0){
@@ -55,38 +56,28 @@ document.getElementById('addToCart').onclick = function()
 		const produit_selectionne = {
 			produit_id : id,
 			produit_couleur : couleur,
-			produit_quantite : quantite
-		};
-		//on vérifie que le panier n'est pas vide
-		if (localStorage.length != 0){
+			produit_quantite : newQuantite
+		}
 			//on vérifie que dans le local storage l'id est existant
-			let get_panier = localStorage.getItem("obj");
-			let objJson = JSON.parse(get_panier);
-			console.log(localStorage);
-			objJson.forEach(element => {
-					if((element.produit_id === id) && (element.produit_couleur === couleur)){
-						element.produit_quantite = Number(element.produit_quantite) + Number(quantite);
-						console.log(element.produit_quantite);
-						console.log("duplicat");
-						console.log(localStorage);
-						// prob ici
-					}
-					else{
-						panier.push(produit_selectionne);
-						let produit_json = JSON.stringify(panier);
-						localStorage.setItem("obj",produit_json);
-						console.log(localStorage);
-						console.log("nouveau");
-					}
-				}
-			);
-			
+		let get_panier = localStorage.getItem("obj");
+		let objJson = JSON.parse(get_panier) || [];
+		const identicalObject = objJson.find(canape => canape.produit_id === id && canape.produit_couleur === couleur);
+		let newPanier = [];
+		if(identicalObject)
+		{
+		const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
+		newPanier = objJson
+			.filter(canape => !(canape.produit_id === id && canape.produit_couleur === couleur))
+			.concat(identicalObjectNewQuantity);
 		}
 		else{
-			panier.push(produit_selectionne);
-			let produit_json = JSON.stringify(panier);
-			localStorage.setItem("obj",produit_json);
+			newPanier = objJson.concat(produit_selectionne);
 		}
+		let produit_json = JSON.stringify(newPanier);
+		localStorage.setItem("obj",produit_json);
+		console.log({localStorage});
 	}
 };
+
+
 
