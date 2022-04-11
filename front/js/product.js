@@ -41,7 +41,8 @@ let objJson = JSON.parse(get_panier);
 console.log(objJson);
 
 //clic sur le bouton
-document.getElementById('addToCart').onclick = function() {
+document.getElementById('addToCart').onclick = function() 
+{
 	//récupérer quantité et couleur
 	let quantite = document.getElementById('quantity').value;
 	let couleur = document.querySelector('select[name="color-select"]').value;
@@ -53,26 +54,26 @@ document.getElementById('addToCart').onclick = function() {
 		alert("Veuillez sélectionner une couleur.");
 	}
 	else{
-	//on stock les valeurs id, couleur et quantité dans un objet
-	const produit_selectionne = {
-		produit_id : id,
-		produit_couleur : couleur,
-		produit_quantite : quantite
-	};
-	//on vérifie que dans le local storage l'id est existant
-	let get_panier = localStorage.getItem("obj");
-	let objJson = JSON.parse(get_panier);
-	objJson.forEach(element => {
-			if(element.produit_id == id){
-				element.produit_quantite = element.produit_quantite + quantite;
-				console.log(objJson);
+		//on stock les valeurs id, couleur et quantité dans un objet
+		const produit_selectionne = {
+			produit_id : id,
+			produit_couleur : couleur,
+			produit_quantite : Number(quantite)
+		};
+		//on vérifie que dans le local storage l'id est existant
+		let get_panier = localStorage.getItem("obj");
+		let objJson = JSON.parse(get_panier);
+		objJson.forEach(element => {
+				if(element.produit_id == id){
+					element.produit_quantite = Number(element.produit_quantite) + Number(quantite);
+					console.log(objJson);
+				}
+				else{
+					panier.push(produit_selectionne);
+					let produit_json = JSON.stringify(panier);
+					localStorage.setItem("obj",produit_json);
+				}
 			}
-			else{
-				panier.push(produit_selectionne);
-				let produit_json = JSON.stringify(panier);
-				localStorage.setItem("obj",produit_json);
-			}
-		}
 		);
 	}
 };
