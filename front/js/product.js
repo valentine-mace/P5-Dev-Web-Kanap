@@ -36,52 +36,44 @@ fetch("http://localhost:3000/api/products/" + id)
 
 //créer array pour panier 
 let panier = [];
+let get_panier = localStorage.getItem("obj");
+let objJson = JSON.parse(get_panier);
+console.log(objJson);
 
-//récupérer id, quantité et couleur et insérer dans un objet
-let color;
-let quantite = 0;
-
-//fonction pour récupérer la couleur
-document.addEventListener('DOMContentLoaded', function(){
-	document.querySelector('select[name="color-select"]').onchange=changeEventHandler;
-}, false);
-function changeEventHandler(event){
-	color = event.target.value;
+//clic sur le bouton
+document.getElementById('addToCart').onclick = function() {
+	//récupérer quantité et couleur
+	let quantite = document.getElementById('quantity').value;
+	let couleur = document.querySelector('select[name="color-select"]').value;
+	//vérifier qu'au moins une couleur et un produit ont été sélectionnés
+	if(quantite == 0){
+		alert("Vous devez sélectionner au moins un produit.");
+	}
+	if(couleur == 0){
+		alert("Veuillez sélectionner une couleur.");
+	}
+	else{
+	//on stock les valeurs id, couleur et quantité dans un objet
+	const produit_selectionne = {
+		produit_id : id,
+		produit_couleur : couleur,
+		produit_quantite : quantite
+	};
+	//on vérifie que dans le local storage l'id est existant
+	let get_panier = localStorage.getItem("obj");
+	let objJson = JSON.parse(get_panier);
+	objJson.forEach(element => {
+			if(element.produit_id == id){
+				element.produit_quantite = element.produit_quantite + quantite;
+				console.log(objJson);
+			}
+			else{
+				panier.push(produit_selectionne);
+				let produit_json = JSON.stringify(panier);
+				localStorage.setItem("obj",produit_json);
+			}
+		}
+		);
+	}
 };
 
-//fonction pour récupérer la quantité
-function getQuantity(){
-	document.addEventListener('input', function(event){
-		document.getElementById('quantity').innerHTML = event.target.value;
-		quantite = event.target.value;
-	});
-	return quantite;
-}
-
-quantite = getQuantity();
-console.log(quantite);
-
-
-
-
-const produit_selectionne = {
-	produit_id : id,
-	produit_couleur : color,
-	produit_quantite : quantite
-};
-
-
-// console.log(produit_selectionne);
-
-//condition de click sur le boutton "ajouter au panier"
-//vérifier si dans panier id existant
-//si existant, incrémenter quantité
-//si non, ajouter au panier
-
-//stocker objet dans array avec push ou object create??
-panier.push(produit_selectionne);
-
-//utiliser local storage
-localStorage.setItem(panier);
-
-//gérer plusieurs produits existants
