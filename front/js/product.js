@@ -17,7 +17,6 @@ fetch("http://localhost:3000/api/products/" + id)
 		let product_url = value.imageUrl;
 		let product_alt = value.altTxt;	
 		let product_colors = value.colors;	
-		//console.log(product_colors);
 
     //insérer dans les balises html
 		let nom = document.getElementById('title');
@@ -34,3 +33,34 @@ fetch("http://localhost:3000/api/products/" + id)
 		});
 
   })
+
+//créer array pour panier 
+let panier = [];
+
+//récupérer id, quantité et couleur et insérer dans un objet
+
+//fonction pour récupérer la couleur
+document.addEventListener('DOMContentLoaded', function(){
+	document.querySelector('select[name="color-select"]').onchange=changeEventHandler;
+}, false);
+function changeEventHandler(event){
+	color = event.target.value;
+};
+
+//fonction pour récupérer la quantité
+document.addEventListener('input', function(event){
+	document.getElementById('quantity').innerHTML = event.target.value;
+	let quantité = event.target.value;
+});
+const produit_selectionne = {
+	produit_id : id,
+	produit_couleur : color,
+	produit_quantite : quantité
+};
+// console.log(produit_selectionne);
+
+//stocker objet dans array avec push ou object create??
+
+//utiliser local storage
+
+//gérer plusieurs produits existants
