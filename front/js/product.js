@@ -51,6 +51,10 @@ document.getElementById('addToCart').onclick = function()
 	if(couleur == 0){
 		alert("Veuillez sélectionner une couleur.");
 	}
+	if(newQuantite > 100)
+	{
+		alert("Veuillez sélectionner un maximum de 100 articles.")
+	}
 	else{
 		//on stock les valeurs id, couleur et quantité dans un objet
 		const produit_selectionne = {
@@ -68,9 +72,16 @@ document.getElementById('addToCart').onclick = function()
 		if(identicalObject)
 		{
 		const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
+		//prob ici: supprime le panier
+		// if ((Number(identicalObject.produit_quantite) + Number(newQuantite)) > 100)
+		// {
+		// 	alert("Veuillez sélectionner un maximum de 100 articles.")
+		// }
+		//else{
 		newPanier = objJson
 			.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
 			.concat(identicalObjectNewQuantity);
+		//}
 		}
 		else{
 			newPanier = objJson.concat(produit_selectionne);
