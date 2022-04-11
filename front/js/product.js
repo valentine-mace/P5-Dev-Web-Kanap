@@ -3,6 +3,7 @@ let current_url = window.location.href;
 var url = new URL(current_url);
 let id = url.searchParams.get("id");
 
+//on récupère les données spécifiques au produit depuis la BDD
 fetch("http://localhost:3000/api/products/" + id)
 	.then(function (res) {
 		if (res.ok) {
@@ -43,7 +44,6 @@ document.getElementById('addToCart').onclick = function()
 	//récupérer quantité et couleur
 	let newQuantite = document.getElementById('quantity').value;
 	let couleur = document.querySelector('select[name="color-select"]').value;
-	console.log("couleur récupérée:", couleur);
 	//vérifier qu'au moins une couleur et un produit ont été sélectionnés
 	if(newQuantite == 0){
 		alert("Vous devez sélectionner au moins un produit.");
@@ -58,16 +58,18 @@ document.getElementById('addToCart').onclick = function()
 			produit_couleur : couleur,
 			produit_quantite : newQuantite
 		}
-			//on vérifie que dans le local storage l'id est existant
+		//on vérifie que dans le local storage l'id est existant
 		let get_panier = localStorage.getItem("obj");
 		let objJson = JSON.parse(get_panier) || [];
-		const identicalObject = objJson.find(canape => canape.produit_id === id && canape.produit_couleur === couleur);
+		const identicalObject = objJson.find(objet => objet.produit_id === id && objet.produit_couleur === couleur);
+		//nouveau panier ou on va mettre les nouvelles valeurs
 		let newPanier = [];
+		//condition au cas ou on rajoute un objet existant
 		if(identicalObject)
 		{
 		const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
 		newPanier = objJson
-			.filter(canape => !(canape.produit_id === id && canape.produit_couleur === couleur))
+			.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
 			.concat(identicalObjectNewQuantity);
 		}
 		else{
@@ -75,7 +77,6 @@ document.getElementById('addToCart').onclick = function()
 		}
 		let produit_json = JSON.stringify(newPanier);
 		localStorage.setItem("obj",produit_json);
-		console.log({localStorage});
 	}
 };
 
