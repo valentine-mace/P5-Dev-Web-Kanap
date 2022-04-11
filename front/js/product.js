@@ -38,6 +38,8 @@ fetch("http://localhost:3000/api/products/" + id)
 let panier = [];
 
 //récupérer id, quantité et couleur et insérer dans un objet
+let color;
+let quantite = 0;
 
 //fonction pour récupérer la couleur
 document.addEventListener('DOMContentLoaded', function(){
@@ -48,19 +50,38 @@ function changeEventHandler(event){
 };
 
 //fonction pour récupérer la quantité
-document.addEventListener('input', function(event){
-	document.getElementById('quantity').innerHTML = event.target.value;
-	let quantité = event.target.value;
-});
+function getQuantity(){
+	document.addEventListener('input', function(event){
+		document.getElementById('quantity').innerHTML = event.target.value;
+		quantite = event.target.value;
+	});
+	return quantite;
+}
+
+quantite = getQuantity();
+console.log(quantite);
+
+
+
+
 const produit_selectionne = {
 	produit_id : id,
 	produit_couleur : color,
-	produit_quantite : quantité
+	produit_quantite : quantite
 };
+
+
 // console.log(produit_selectionne);
 
+//condition de click sur le boutton "ajouter au panier"
+//vérifier si dans panier id existant
+//si existant, incrémenter quantité
+//si non, ajouter au panier
+
 //stocker objet dans array avec push ou object create??
+panier.push(produit_selectionne);
 
 //utiliser local storage
+localStorage.setItem(panier);
 
 //gérer plusieurs produits existants
