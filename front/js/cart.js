@@ -58,11 +58,8 @@ objJson.forEach(element =>
       //récupérer le prix total
       prix_total += Number(element.produit_quantite) * Number(product_price);
       document.getElementById("totalPrice").innerHTML = prix_total;
-
-      
+  
     })
-
-   
 
 });
 
