@@ -3,10 +3,8 @@ let get_panier = localStorage.getItem("obj");
 let objJson = JSON.parse(get_panier);
 
 let contenu = "";
-
-let product_price = 0;
-let total_produits = 0;
 let sum = 0;
+let prix_total = 0;
 
 objJson.forEach(element => 
 {
@@ -56,6 +54,11 @@ objJson.forEach(element =>
       //récupérer le nombre total d'articles
       sum += Number(element.produit_quantite);
       document.getElementById("totalQuantity").innerHTML = sum;
+
+      //récupérer le prix total
+      prix_total += Number(element.produit_quantite) * Number(product_price);
+      document.getElementById("totalPrice").innerHTML = prix_total;
+
       
     })
 
