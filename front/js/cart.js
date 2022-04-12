@@ -6,6 +6,7 @@ let contenu = "";
 
 let product_price = 0;
 let total_produits = 0;
+let sum = 0;
 
 objJson.forEach(element => 
 {
@@ -51,19 +52,22 @@ objJson.forEach(element =>
 
       document.getElementById("cart__items").innerHTML = contenu;
 
+      
+      //récupérer le nombre total d'articles
+      sum += Number(element.produit_quantite);
+      document.getElementById("totalQuantity").innerHTML = sum;
+      
     })
+
+   
 
 });
 
-//récupérer le nombre total d'articles
-let sum = 0;
-for(i = 0; i < objJson.length; i++ )
-{
- sum += Number(objJson[i].produit_quantite);
- 
-}
-console.log(sum);
-document.getElementById("totalQuantity").innerHTML = sum;
+
+
+
+
+
 
 
 
