@@ -4,7 +4,6 @@ let objJson = JSON.parse(get_panier);
 
 let contenu = "";
 
-let prix_total = 0;
 let product_price = 0;
 let total_produits = 0;
 
@@ -55,6 +54,17 @@ objJson.forEach(element =>
     })
 
 });
+
+//récupérer le nombre total d'articles
+let sum = 0;
+for(i = 0; i < objJson.length; i++ )
+{
+ sum += Number(objJson[i].produit_quantite);
+ 
+}
+console.log(sum);
+document.getElementById("totalQuantity").innerHTML = sum;
+
 
 
 
