@@ -3,12 +3,11 @@ let get_panier = localStorage.getItem("obj");
 let objJson = JSON.parse(get_panier);
 
 let contenu = "";
-let sum = 0;
+let quantite_totale = 0;
 let prix_total = 0;
 
 objJson.forEach(element => 
 {
-  
   //on récupère les autres données du produit à partir de l'id
   fetch("http://localhost:3000/api/products/" + element.produit_id)
     .then(function (res) {
@@ -25,6 +24,7 @@ objJson.forEach(element =>
       let product_alt = value.altTxt;	
       let product_color = element.produit_couleur;
       let product_quantity= element.produit_quantite;	
+      //on les intègre dans l'HTML
       contenu = contenu +
       "<article class=\"cart__item\" data-id=\"{product-ID}\" data-color=\"{product-color}\">" +
       "<div class=\"cart__item__img\">" +
@@ -49,19 +49,46 @@ objJson.forEach(element =>
       "</article>"
 
       document.getElementById("cart__items").innerHTML = contenu;
+      updatePanier();
 
-      
-      //récupérer le nombre total d'articles
-      sum += Number(element.produit_quantite);
-      document.getElementById("totalQuantity").innerHTML = sum;
 
-      //récupérer le prix total
-      prix_total += Number(element.produit_quantite) * Number(product_price);
-      document.getElementById("totalPrice").innerHTML = prix_total;
+      function updatePanier(){
+
+        //récupérer le nombre total d'articles
+        quantite_totale += Number(element.produit_quantite);
+        document.getElementById("totalQuantity").innerHTML = quantite_totale;
+        //console.log(element.produit_quantite);
+
+        //récupérer le prix total
+        prix_total += Number(element.produit_quantite) * Number(product_price);
+        document.getElementById("totalPrice").innerHTML = prix_total;
+        // console.log(selectElement);
+      }
   
     })
 
 });
+
+//je veux récupérer l'input quantité
+var selectElement = document.getElementsByClassName("itemQuantity").dataset.value;
+console.log(selectElement);
+
+//cette fonction OK --> 
+// selectElement.addEventListener('change', (event) => {
+//   console.log(event.target.value);
+//   //updatePanier();
+// });
+
+        
+
+
+
+
+
+
+
+
+
 
 
 
