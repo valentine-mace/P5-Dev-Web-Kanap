@@ -34,65 +34,58 @@ fetch("http://localhost:3000/api/products/" + id)
 		});
 
 		//créer array pour panier 
-let panier = [];
+		let panier = [];
 
-//clic sur le bouton
-document.getElementById('addToCart').onclick = function() 
-{
-	//récupérer quantité et couleur
-	let newQuantite = document.getElementById('quantity').value;
-	let couleur = document.querySelector('select[name="color-select"]').value;
-	//vérifier qu'au moins une couleur et un produit ont été sélectionnés
-	if(newQuantite == 0){
-		alert("Vous devez sélectionner au moins un produit.");
-	}
-	if(couleur == 0){
-		alert("Veuillez sélectionner une couleur.");
-	}
-	if(newQuantite > 100)
-	{
-		alert("Veuillez sélectionner un maximum de 100 articles.")
-	}
-	else{
-		//on stock les valeurs id, couleur et quantité dans un objet
-		const produit_selectionne = {
-			produit_id : id,
-			produit_couleur : couleur,
-			produit_quantite : newQuantite,
-			produit_prix : product_price,
-			produit_nom : product_name,
-			produit_description : product_description, 
-			produit_url : product_url,
-			produit_alt : product_alt, 
-		}
-		//on vérifie que dans le local storage l'id est existant
-		let get_panier = localStorage.getItem("obj");
-		let objJson = JSON.parse(get_panier) || [];
-		const identicalObject = objJson.find(objet => objet.produit_id === id && objet.produit_couleur === couleur);
-		//nouveau panier ou on va mettre les nouvelles valeurs
-		let newPanier = [];
-		//condition au cas ou on rajoute un objet existant
-		if(identicalObject)
+		//clic sur le bouton
+		document.getElementById('addToCart').onclick = function() 
 		{
-		const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
-		//prob ici: supprime le panier
-		// if ((Number(identicalObject.produit_quantite) + Number(newQuantite)) > 100)
-		// {
-		// 	alert("Veuillez sélectionner un maximum de 100 articles.")
-		// }
-		//else{
-		newPanier = objJson
-			.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
-			.concat(identicalObjectNewQuantity);
-		//}
-		}
-		else{
-			newPanier = objJson.concat(produit_selectionne);
-		}
-		let produit_json = JSON.stringify(newPanier);
-		localStorage.setItem("obj",produit_json);
-	}
-};
+			//récupérer quantité et couleur
+			let newQuantite = document.getElementById('quantity').value;
+			let couleur = document.querySelector('select[name="color-select"]').value;
+			//vérifier qu'au moins une couleur et un produit ont été sélectionnés
+			if(newQuantite == 0){
+				alert("Vous devez sélectionner au moins un produit.");
+			}
+			if(couleur == 0){
+				alert("Veuillez sélectionner une couleur.");
+			}
+			if(newQuantite > 100)
+			{
+				alert("Veuillez sélectionner un maximum de 100 articles.")
+			}
+			else{
+				//on stock les valeurs id, couleur et quantité dans un objet
+				const produit_selectionne = {
+					produit_id : id,
+					produit_couleur : couleur,
+					produit_quantite : newQuantite,
+					produit_prix : product_price,
+					produit_nom : product_name,
+					produit_description : product_description, 
+					produit_url : product_url,
+					produit_alt : product_alt, 
+				}
+				//on vérifie que dans le local storage l'id est existant
+				let get_panier = localStorage.getItem("obj");
+				let panier = JSON.parse(get_panier) || [];
+				const identicalObject = panier.find(objet => objet.produit_id === id && objet.produit_couleur === couleur);
+				//nouveau panier ou on va mettre les nouvelles valeurs
+				let newPanier = [];
+				//condition au cas ou on rajoute un objet existant
+				if(identicalObject)
+				{
+				const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
+				newPanier = panier
+					.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
+					.concat(identicalObjectNewQuantity);
+				}
+				else{
+					newPanier = panier.concat(produit_selectionne);
+				}
+				let produit_json = JSON.stringify(newPanier);
+				localStorage.setItem("obj",produit_json);
+			}
+		};
 
   })
 

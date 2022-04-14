@@ -1,12 +1,12 @@
 //on récupère le local storage
 let get_panier = localStorage.getItem("obj");
-let objJson = JSON.parse(get_panier);
+let panier = JSON.parse(get_panier);
 
 let contenu = "";
 let quantite_totale = 0;
 let prix_total = 0;
 
-objJson.forEach(element => 
+panier.forEach(element => 
 {
   //récupérer les données du produit
   let product_id = element.produit_id;
@@ -31,7 +31,7 @@ objJson.forEach(element =>
     "<div class=\"cart__item__content__settings\">" +
       "<div class=\"cart__item__content__settings__quantity\">" +
         "<p> Qté :</p>" +
-        "<input type=\"number\" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value="+product_quantity+">"+
+        "<input type=\"number\" id="+product_id+" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value="+product_quantity+">"+
       "</div>" +
       "<div class=\"cart__item__content__settings__delete\">" +
         "<p class=\"deleteItem\">Supprimer</p>" +
@@ -42,17 +42,14 @@ objJson.forEach(element =>
 
 });
 
-//on intègre tout dans l'html
-document.getElementById("cart__items").innerHTML = contenu;
-updatePanier();
-
 //fonction qui met à jour le prix et quantité totaux
 function updatePanier(){
 
   //récupérer le nombre total d'articles
-  objJson.forEach(element => {
+  panier.forEach(element => {
     quantite_totale += Number(element.produit_quantite);
     document.getElementById("totalQuantity").innerHTML = quantite_totale;
+    console.log(element.produit_quantite);
 
     //récupérer le prix total
     prix_total += Number(element.produit_quantite) * Number(element.produit_prix);
@@ -61,23 +58,41 @@ function updatePanier(){
 
 }
 
+//on intègre tout dans l'html
+document.getElementById("cart__items").innerHTML = contenu;
+updatePanier();
 
 var arr = document.querySelectorAll(".itemQuantity");
 arr.forEach(el => 
 {
-  console.log(el);
   el.addEventListener('change', (event) => {
-      product_quantity = event.target.value;
-      console.log(objJson);
-      // objJson.forEach(ele =>{
-      // ele.produit_quantite = product_quantity;
-      //   let produit_json = JSON.stringify(objJson);
-      //   localStorage.setItem("obj",produit_json);
-      // });
+    //on récupère la nouvelle quantité et l'id correspondant
+    new_product_quantity = event.target.value;
+    id_productToChange = el.id;
+    if(new_product_quantity == 0){
+      alert("Veuillez sélectionner au moins un produit.")
+    }
+    else{
+
+      const findObject = panier.find(objet => objet.produit_id === id_productToChange);
+      const objectNewQuantity = {...findObject, produit_quantite: Number(new_product_quantity)};
+      newPanier = panier
+        .filter(objet => !(objet.produit_id === id_productToChange))
+        .concat(objectNewQuantity);
+      let produit_json = JSON.stringify(newPanier);
+			localStorage.setItem("obj",produit_json);
+      console.log(newPanier);
+      updatePanier();
+
+      //on met à jour le prix et quantité totaux avec les nouvelles valeurs
+    }
 
     });
 
 });
+
+
+
 
 
 
