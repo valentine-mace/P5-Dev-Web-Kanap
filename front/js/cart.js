@@ -34,7 +34,7 @@ panier.forEach(element =>
         "<input type=\"number\" id="+product_id+" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value="+product_quantity+">"+
       "</div>" +
       "<div class=\"cart__item__content__settings__delete\">" +
-        "<p class=\"deleteItem\">Supprimer</p>" +
+        "<p id="+product_id+" class=\"deleteItem\">Supprimer</p>" +
       "</div>" +
     "</div>" +
   "</div>" +
@@ -42,28 +42,14 @@ panier.forEach(element =>
 
 });
 
-//fonction qui met à jour le prix et quantité totaux
-function updatePanier(){
-
-  //récupérer le nombre total d'articles
-  panier.forEach(element => {
-    quantite_totale += Number(element.produit_quantite);
-    document.getElementById("totalQuantity").innerHTML = quantite_totale;
-    console.log(element.produit_quantite);
-
-    //récupérer le prix total
-    prix_total += Number(element.produit_quantite) * Number(element.produit_prix);
-    document.getElementById("totalPrice").innerHTML = prix_total;
-  });
-
-}
 
 //on intègre tout dans l'html
 document.getElementById("cart__items").innerHTML = contenu;
 updatePanier();
 
-var arr = document.querySelectorAll(".itemQuantity");
-arr.forEach(el => 
+//modification quantité objets
+var modif = document.querySelectorAll(".itemQuantity");
+modif.forEach(el => 
 {
   el.addEventListener('change', (event) => {
     //on récupère la nouvelle quantité et l'id correspondant
@@ -82,14 +68,49 @@ arr.forEach(el =>
       let produit_json = JSON.stringify(newPanier);
 			localStorage.setItem("obj",produit_json);
       console.log(newPanier);
-      updatePanier();
-
-      //on met à jour le prix et quantité totaux avec les nouvelles valeurs
     }
-
     });
+    
+    //on met à jour le prix et quantité totaux avec les nouvelles valeurs
+    //PROB ICI CE FDP
+    updatePanier();
 
 });
+
+//suppression d'un objet
+var supp = document.querySelectorAll(".deleteItem");
+supp.forEach(el => 
+  {
+    el.addEventListener('click', () => 
+    {
+      //on récupère la nouvelle quantité et l'id correspondant
+      id_productToDelete = el.id;
+      newPanier = panier
+        .filter(objet => !(objet.produit_id === id_productToDelete))
+      let produit_json = JSON.stringify(newPanier);
+			localStorage.setItem("obj",produit_json);
+      window.location.reload();
+
+    });
+  
+  });
+
+//fonction qui met à jour le prix et quantité totaux
+function updatePanier(){
+
+  quantite_totale = 0;
+
+  //récupérer le nombre total d'articles
+  panier.forEach(function(element){
+    quantite_totale += Number(element.produit_quantite);
+    document.getElementById("totalQuantity").innerHTML = quantite_totale;
+
+    //récupérer le prix total
+    //prix_total += Number(element.produit_quantite) * Number(element.produit_prix);
+    //document.getElementById("totalPrice").innerHTML = prix_total;
+  });
+
+}
 
 
 
