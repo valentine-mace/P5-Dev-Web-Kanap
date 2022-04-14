@@ -33,9 +33,7 @@ fetch("http://localhost:3000/api/products/" + id)
 			couleurs.innerHTML += `<option value="${product_color}">${product_color}</option>`;
 		});
 
-  })
-
-//créer array pour panier 
+		//créer array pour panier 
 let panier = [];
 
 //clic sur le bouton
@@ -60,7 +58,12 @@ document.getElementById('addToCart').onclick = function()
 		const produit_selectionne = {
 			produit_id : id,
 			produit_couleur : couleur,
-			produit_quantite : newQuantite
+			produit_quantite : newQuantite,
+			produit_prix : product_price,
+			produit_nom : product_name,
+			produit_description : product_description, 
+			produit_url : product_url,
+			produit_alt : product_alt, 
 		}
 		//on vérifie que dans le local storage l'id est existant
 		let get_panier = localStorage.getItem("obj");
@@ -90,6 +93,10 @@ document.getElementById('addToCart').onclick = function()
 		localStorage.setItem("obj",produit_json);
 	}
 };
+
+  })
+
+
 
 
 
