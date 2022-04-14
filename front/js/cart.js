@@ -42,7 +42,6 @@ panier.forEach(element =>
 
 });
 
-
 //on intègre tout dans l'html
 document.getElementById("cart__items").innerHTML = contenu;
 updatePanier();
@@ -111,6 +110,91 @@ function updatePanier(){
   });
 
 }
+
+//formulaire de contact - récupération des données rentrées par l'utilisateur
+var prenom_query = document.getElementById("firstName");
+prenom_query.addEventListener('change', (event) => {
+  //on récupère le prénom
+  prenom = event.target.value;
+  if (/^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i.test(prenom))
+  {
+    return true;
+  }
+  document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
+  return (false)
+});
+
+var nom_query = document.getElementById("lastName");
+nom_query.addEventListener('change', (event) => {
+  //on récupère le nom
+  nom = event.target.value;
+  //prob???????????????
+  if (/^(([ ,.'-](?<!( {2}|[,.'-]{2})))*[A-Za-z])+[ ,.'-]?$/i.test(nom))
+  {
+    return (true)
+  }
+  document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
+  return (false)
+});
+
+var adresse_query = document.getElementById("address");
+adresse_query.addEventListener('change', (event) => {
+  //on récupère l'adresse
+  adresse = event.target.value;
+  if (/^[a-zA-Z0-9\s,.'-]{3,}$/.test(adresse))
+  {
+    return (true)
+  }
+  document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
+  return (false)
+});
+
+var ville_query = document.getElementById("city");
+ville_query.addEventListener('change', (event) => {
+  //on récupère la ville
+  ville = event.target.value;
+  if (/^[a-zA-Z\u0080-\u024F]+(?:([\ \-\']|(\.\ ))[a-zA-Z\u0080-\u024F]+)*$/.test(ville))
+  {
+    return (true)
+  }
+  document.getElementById("cityErrorMsg").innerHTML = "La ville n'est pas dans le bon format.";
+  return (false)
+});
+
+var email_query = document.getElementById("email");
+email_query.addEventListener('change', (event) => {
+   //on récupère l'email
+  email = event.target.value;
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+  {
+    return (true)
+  }
+  document.getElementById("emailErrorMsg").innerHTML = "L'adresse email n'est pas dans le bon format.";
+  return (false)
+});
+
+//lors du clic sur le bouton Envoyer, toutes les données sont récupérées
+var order = document.getElementById("order");
+order.addEventListener('click', () => 
+{
+  let contact_form =
+  {
+  firstName : prenom_query.value,
+  lastName : nom_query.value,
+  address : adresse_query.value,
+  city : ville_query.value,
+  email : email_query.value
+  }
+  let products_array = JSON.parse(localStorage.getItem("obj"));
+  console.log(products_array);
+}
+);
+
+let products_array = JSON.parse(localStorage.getItem("obj"));
+console.log(Array.from(products_array));
+  
+
+
 
 
 
