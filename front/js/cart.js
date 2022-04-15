@@ -75,7 +75,6 @@ modif.forEach(el =>
  
 });
 
-
 //suppression d'un objet
 var supp = document.querySelectorAll(".deleteItem");
 supp.forEach(el => 
@@ -122,8 +121,10 @@ prenom_query.addEventListener('change', (event) => {
   {
     return true;
   }
-  document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
-  return (false)
+  else{
+    document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
+    return (false)
+  }
 });
 
 var nom_query = document.getElementById("lastName");
@@ -187,11 +188,49 @@ order.addEventListener('click', () =>
   city : ville_query.value,
   email : email_query.value
   }
+  let products_array = JSON.parse(localStorage.getItem("obj"));
+  products_array.forEach(objet =>{
+    let array = {
+    id : objet.produit_id,
+    quantity : objet.produit_quantite,
+    color : objet.produit_couleur
+    }
+    let jsonToPost = {
+      contact_form : contact_form,
+      products_array : array
+    }
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jsonToPost),
+    })
+      .then(function (res) {
+        if (res.ok) {
+          console.log("test");
+          return res.json();
+        }
+        //Making a function that clear the local storage and put the orderId in the confirmation's Url
+      })
+      .then(function orderId(response) {
+        console.log(response);
+        //localStorage.clear();
+        //document.location.href = `confirmation.html?orderId=${response.orderId}`;
+      })
+      //Making a catch to display an error if something went wrong
+      .catch(function (err) {
+        "Impossible de récupérer les données de l'API (" + err + ")";
+      });
+  });
+
+
 }
 );
 
-let products_array = JSON.parse(localStorage.getItem("obj"));
-//console.log(Array.from(products_array));
+
+
   
 
 
