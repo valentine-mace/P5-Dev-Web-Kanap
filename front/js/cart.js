@@ -128,7 +128,7 @@ var nom_query = document.getElementById("lastName");
 nom_query.addEventListener('change', (event) => {
   //on récupère le nom
   nom = event.target.value;
-  //prob???????????????
+  //prob??????????????? -> rajouter les accents
   if (/^(([ ,.'-](?<!( {2}|[,.'-]{2})))*[A-Za-z])+[ ,.'-]?$/i.test(nom))
   {
     return (true)
@@ -185,8 +185,6 @@ order.addEventListener('click', () =>
   city : ville_query.value,
   email : email_query.value
   }
-  let products_array = JSON.parse(localStorage.getItem("obj"));
-  console.log(products_array);
 }
 );
 

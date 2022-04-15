@@ -49,7 +49,8 @@ fetch("http://localhost:3000/api/products/" + id)
 			if(couleur == 0){
 				alert("Veuillez sélectionner une couleur.");
 			}
-			else{
+			else
+			{
 				if(newQuantite > 100)
 				{
 					alert("Veuillez sélectionner un maximum de 100 articles.")
@@ -86,7 +87,7 @@ fetch("http://localhost:3000/api/products/" + id)
 					let produit_json = JSON.stringify(newPanier);
 					localStorage.setItem("obj",produit_json);
 				}
-		}
+			}
 		};
 
   })
