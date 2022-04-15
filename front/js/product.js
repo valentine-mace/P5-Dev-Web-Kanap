@@ -77,6 +77,7 @@ fetch("http://localhost:3000/api/products/" + id)
 					//condition au cas ou on rajoute un objet existant
 					if(identicalObject)
 					{
+						//condition: la nouvelle quantité doit toujours être inférieure à 100
 						if(Number(identicalObject.produit_quantite) + Number(newQuantite) <= 100)
 						{
 							const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
@@ -89,9 +90,11 @@ fetch("http://localhost:3000/api/products/" + id)
 							return false;
 						}
 					}
+					//condition: on rajoute un nouveau produit non existant dans le panier
 					else{
 						newPanier = panier.concat(produit_selectionne);
 					}
+					// on envoie le panier dans le localstorage
 					let produit_json = JSON.stringify(newPanier);
 					localStorage.setItem("obj",produit_json);
 				}
