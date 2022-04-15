@@ -6,6 +6,7 @@ let contenu = "";
 let quantite_totale = 0;
 let prix_total = 0;
 
+//affichage des produits présents dans le panier
 panier.forEach(element => 
 {
   //récupérer les données du produit
@@ -45,55 +46,61 @@ panier.forEach(element =>
 //on intègre tout dans l'html
 document.getElementById("cart__items").innerHTML = contenu;
 updatePanier();
+modifPanier();
+suppPanier();
 
 //modification quantité objets
-var modif = document.querySelectorAll(".itemQuantity");
-modif.forEach(el => 
-{
-  el.addEventListener('change', (event) => {
-    //on récupère la nouvelle quantité et l'id correspondant
-    new_product_quantity = event.target.value;
-    id_productToChange = el.id;
-    if(new_product_quantity == 0){
-      alert("Veuillez sélectionner au moins un produit.")
-    }
-    else{
-
-      const findObject = panier.find(objet => objet.produit_id === id_productToChange);
-      const objectNewQuantity = {...findObject, produit_quantite: Number(new_product_quantity)};
-      newPanier = panier
-        .filter(objet => !(objet.produit_id === id_productToChange))
-        .concat(objectNewQuantity);
-      let produit_json = JSON.stringify(newPanier);
-			localStorage.setItem("obj",produit_json);
-      //on met à jour le prix et quantité totaux avec les nouvelles valeurs
-      updatePanier();
-      window.location.reload();
-
-    }
-    });
- 
-});
-
-//suppression d'un objet
-var supp = document.querySelectorAll(".deleteItem");
-supp.forEach(el => 
+function modifPanier(){
+  var modif = document.querySelectorAll(".itemQuantity");
+  modif.forEach(el => 
   {
-    el.addEventListener('click', () => 
-    {
+    el.addEventListener('change', (event) => {
       //on récupère la nouvelle quantité et l'id correspondant
-      let id_productToDelete = el.id;
-      const productToDelete = panier.find(objet => objet.produit_id === id_productToDelete);
-      let couleur_productToDelete = productToDelete.produit_couleur;
-      newPanier = panier
-        .filter(objet => !(objet.produit_id === id_productToDelete  && objet.produit_couleur === couleur_productToDelete))
-      let produit_json = JSON.stringify(newPanier);
-			localStorage.setItem("obj",produit_json);
-      window.location.reload();
+      new_product_quantity = event.target.value;
+      id_productToChange = el.id;
+      if(new_product_quantity == 0){
+        alert("Veuillez sélectionner au moins un produit.")
+      }
+      else{
 
-    });
+        const findObject = panier.find(objet => objet.produit_id === id_productToChange);
+        const objectNewQuantity = {...findObject, produit_quantite: Number(new_product_quantity)};
+        newPanier = panier
+          .filter(objet => !(objet.produit_id === id_productToChange))
+          .concat(objectNewQuantity);
+        let produit_json = JSON.stringify(newPanier);
+        localStorage.setItem("obj",produit_json);
+        //on met à jour le prix et quantité totaux avec les nouvelles valeurs
+        updatePanier();
+        window.location.reload();
+
+      }
+      });
   
   });
+}
+
+//suppression d'un objet
+function suppPanier(){
+  var supp = document.querySelectorAll(".deleteItem");
+  supp.forEach(el => 
+    {
+      el.addEventListener('click', () => 
+      {
+        //on récupère la nouvelle quantité et l'id correspondant
+        let id_productToDelete = el.id;
+        const productToDelete = panier.find(objet => objet.produit_id === id_productToDelete);
+        let couleur_productToDelete = productToDelete.produit_couleur;
+        newPanier = panier
+          .filter(objet => !(objet.produit_id === id_productToDelete  && objet.produit_couleur === couleur_productToDelete))
+        let produit_json = JSON.stringify(newPanier);
+        localStorage.setItem("obj",produit_json);
+        window.location.reload();
+
+      });
+    
+    });
+}
 
 //fonction qui met à jour le prix et quantité totaux
 function updatePanier(){
