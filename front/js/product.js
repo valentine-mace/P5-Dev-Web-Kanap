@@ -77,10 +77,17 @@ fetch("http://localhost:3000/api/products/" + id)
 					//condition au cas ou on rajoute un objet existant
 					if(identicalObject)
 					{
-					const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
-					newPanier = panier
-						.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
-						.concat(identicalObjectNewQuantity);
+						if(Number(identicalObject.produit_quantite) + Number(newQuantite) <= 100)
+						{
+							const identicalObjectNewQuantity = {...identicalObject, produit_quantite: Number(identicalObject.produit_quantite) + Number(newQuantite) };
+							newPanier = panier
+								.filter(objet => !(objet.produit_id === id && objet.produit_couleur === couleur))
+								.concat(identicalObjectNewQuantity);
+						}
+						else{
+							alert("Veuillez sélectionner un maximum de 100 articles.");
+							return false;
+						}
 					}
 					else{
 						newPanier = panier.concat(produit_selectionne);
