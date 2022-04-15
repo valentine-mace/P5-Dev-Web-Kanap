@@ -66,15 +66,15 @@ modif.forEach(el =>
         .concat(objectNewQuantity);
       let produit_json = JSON.stringify(newPanier);
 			localStorage.setItem("obj",produit_json);
-      console.log(newPanier);
+      //on met à jour le prix et quantité totaux avec les nouvelles valeurs
+      updatePanier();
+      window.location.reload();
+
     }
     });
-    
-    //on met à jour le prix et quantité totaux avec les nouvelles valeurs
-    //PROB ICI CE FDP
-    updatePanier();
-
+ 
 });
+
 
 //suppression d'un objet
 var supp = document.querySelectorAll(".deleteItem");
@@ -105,8 +105,8 @@ function updatePanier(){
     document.getElementById("totalQuantity").innerHTML = quantite_totale;
 
     //récupérer le prix total
-    //prix_total += Number(element.produit_quantite) * Number(element.produit_prix);
-    //document.getElementById("totalPrice").innerHTML = prix_total;
+    prix_total += Number(element.produit_quantite) * Number(element.produit_prix);
+    document.getElementById("totalPrice").innerHTML = prix_total;
   });
 
 }
