@@ -1,4 +1,4 @@
-//récupération de toutes les données
+//récupération de toutes les données de la base de données
 fetch("http://localhost:3000/api/products")
 	.then(function (res) {
 		if (res.ok) {
@@ -14,6 +14,7 @@ fetch("http://localhost:3000/api/products")
 			let product_url = value[i].imageUrl;
 			let product_alt = value[i].altTxt;
 			let product_id = value[i]._id;	
+			//intégration du contenu dans le bloc HTML
 			contenu = contenu +
 			"<a href=\"./product.html?id="+product_id+"\">" +
 			"<article>" +

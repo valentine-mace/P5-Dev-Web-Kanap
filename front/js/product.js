@@ -36,7 +36,7 @@ fetch("http://localhost:3000/api/products/" + id)
 		//créer array pour panier 
 		let panier = [];
 
-		//clic sur le bouton
+		//action au clic sur le bouton
 		document.getElementById('addToCart').onclick = function() 
 		{
 			//récupérer quantité et couleur
