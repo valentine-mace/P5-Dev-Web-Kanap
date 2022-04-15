@@ -53,7 +53,8 @@ fetch("http://localhost:3000/api/products/" + id)
 			{
 				if(newQuantite > 100)
 				{
-					alert("Veuillez sélectionner un maximum de 100 articles.")
+					alert("Veuillez sélectionner un maximum de 100 articles.");
+					return false;
 				}
 				else{
 					//on stock les valeurs id, couleur et quantité dans un objet
