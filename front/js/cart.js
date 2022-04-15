@@ -62,18 +62,23 @@ function modifPanier(){
         alert("Veuillez sélectionner au moins un produit.")
       }
       else{
-
-        const findObject = panier.find(objet => objet.produit_id === id_productToChange);
-        const objectNewQuantity = {...findObject, produit_quantite: Number(new_product_quantity)};
-        newPanier = panier
-          .filter(objet => !(objet.produit_id === id_productToChange))
-          .concat(objectNewQuantity);
-        let produit_json = JSON.stringify(newPanier);
-        localStorage.setItem("obj",produit_json);
-        //on met à jour le prix et quantité totaux avec les nouvelles valeurs
-        updatePanier();
-        window.location.reload();
-
+        if(event.target.value < 100)
+        {
+          const findObject = panier.find(objet => objet.produit_id === id_productToChange);
+          const objectNewQuantity = {...findObject, produit_quantite: Number(new_product_quantity)};
+          newPanier = panier
+            .filter(objet => !(objet.produit_id === id_productToChange))
+            .concat(objectNewQuantity);
+          let produit_json = JSON.stringify(newPanier);
+          localStorage.setItem("obj",produit_json);
+          //on met à jour le prix et quantité totaux avec les nouvelles valeurs
+          updatePanier();
+          window.location.reload();
+        }
+        else{
+					alert("Veuillez sélectionner un maximum de 100 articles.");
+					return false;
+				}
       }
       });
   
