@@ -34,7 +34,7 @@ panier.forEach(element =>
         "<input type=\"number\" id="+product_id+" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value="+product_quantity+">"+
       "</div>" +
       "<div class=\"cart__item__content__settings__delete\">" +
-        "<p id="+product_id+" class=\"deleteItem\">Supprimer</p>" +
+        "<p id="+product_id+" value="+product_color+" class=\"deleteItem\">Supprimer</p>" +
       "</div>" +
     "</div>" +
   "</div>" +
@@ -83,9 +83,11 @@ supp.forEach(el =>
     el.addEventListener('click', () => 
     {
       //on récupère la nouvelle quantité et l'id correspondant
-      id_productToDelete = el.id;
+      let id_productToDelete = el.id;
+      const productToDelete = panier.find(objet => objet.produit_id === id_productToDelete);
+      let couleur_productToDelete = productToDelete.produit_couleur;
       newPanier = panier
-        .filter(objet => !(objet.produit_id === id_productToDelete))
+        .filter(objet => !(objet.produit_id === id_productToDelete  && objet.produit_couleur === couleur_productToDelete))
       let produit_json = JSON.stringify(newPanier);
 			localStorage.setItem("obj",produit_json);
       window.location.reload();
@@ -189,7 +191,7 @@ order.addEventListener('click', () =>
 );
 
 let products_array = JSON.parse(localStorage.getItem("obj"));
-console.log(Array.from(products_array));
+//console.log(Array.from(products_array));
   
 
 
