@@ -201,15 +201,15 @@ order.addEventListener('click', () =>
   email : email_query.value
   }
   let products_array = JSON.parse(localStorage.getItem("obj"));
-  products_array.forEach(objet =>{
-    let array = {
-    id : objet.produit_id,
-    quantity : objet.produit_quantite,
-    color : objet.produit_couleur
-    }
+  //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
+  if(products_array.length !== 0){
+    let array = [];
+    products_array.forEach(objet =>{
+      array.push(objet.produit_id);
+    });
     let jsonToPost = {
-      contact_form : contact_form,
-      products_array : array
+      contact : contact_form,
+      products : array
     }
     fetch("http://localhost:3000/api/products/order", {
       method: "POST",
@@ -221,25 +221,23 @@ order.addEventListener('click', () =>
     })
       .then(function (res) {
         if (res.ok) {
-          console.log("test");
           return res.json();
         }
-        //Making a function that clear the local storage and put the orderId in the confirmation's Url
       })
-      .then(function orderId(response) {
-        console.log(response);
-        //localStorage.clear();
-        //document.location.href = `confirmation.html?orderId=${response.orderId}`;
+      .then(function (response) {
+        let orderId = response.orderId;
+        localStorage.clear();
       })
       //Making a catch to display an error if something went wrong
       .catch(function (err) {
-        "Impossible de récupérer les données de l'API (" + err + ")";
+        console.log(err);
       });
-  });
+  }
+  else{
+    alert("Le panier est vide.");
+  }
 
-
-}
-);
+});
 
 
 
