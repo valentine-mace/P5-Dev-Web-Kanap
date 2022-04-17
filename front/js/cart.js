@@ -226,7 +226,7 @@ order.addEventListener('click', () =>
       })
       .then(function (response) {
         let orderId = response.orderId;
-        localStorage.clear();
+        document.location.href = `confirmation.html?orderId=${orderId}`;
       })
       //Making a catch to display an error if something went wrong
       .catch(function (err) {
