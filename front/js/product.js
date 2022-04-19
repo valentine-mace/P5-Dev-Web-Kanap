@@ -33,9 +33,6 @@ fetch("http://localhost:3000/api/products/" + id)
 			couleurs.innerHTML += `<option value="${product_color}">${product_color}</option>`;
 		});
 
-		//créer array pour panier 
-		let panier = [];
-
 		//action au clic sur le bouton
 		document.getElementById('addToCart').onclick = function() 
 		{
@@ -72,7 +69,7 @@ fetch("http://localhost:3000/api/products/" + id)
 					let get_panier = localStorage.getItem("obj");
 					let panier = JSON.parse(get_panier) || [];
 					const identicalObject = panier.find(objet => objet.produit_id === id && objet.produit_couleur === couleur);
-					//nouveau panier ou on va mettre les nouvelles valeurs
+					//nouveau panier => on va mettre les nouvelles valeurs
 					let newPanier = [];
 					//condition au cas ou on rajoute un objet existant
 					if(identicalObject)

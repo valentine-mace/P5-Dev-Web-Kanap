@@ -24,8 +24,9 @@ fetch("http://localhost:3000/api/products")
 			"</article>" +
 			"</a>";
 		}
+		//récupération du contenu de la classe pour y intégrer le contenu
 		document.getElementsByClassName("items")[0].innerHTML = contenu;
 	})
 	.catch(function(err){
-		console.log("erreur");
+		console.log(err);
 	});
