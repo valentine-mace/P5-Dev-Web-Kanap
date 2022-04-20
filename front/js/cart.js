@@ -161,39 +161,39 @@ function getFormContact()
   });
 
   var adresse_query = document.getElementById("address");
-  adresse_query.addEventListener('change', (event) => {
+  adresse_query.addEventListener('input', (event) => {
     //on récupère l'adresse
     adresse = event.target.value;
-    if (/^[a-zA-Z0-9\s,.'-]{3,}$/.test(adresse))
+    if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse))
     {
-      return (true)
+      document.getElementById("addressErrorMsg").innerHTML = "";
+      return true;
     }
     document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
-    return (false)
   });
 
   var ville_query = document.getElementById("city");
-  ville_query.addEventListener('change', (event) => {
+  ville_query.addEventListener('input', (event) => {
     //on récupère la ville
     ville = event.target.value;
-    if (/^[a-zA-Z\u0080-\u024F]+(?:([\ \-\']|(\.\ ))[a-zA-Z\u0080-\u024F]+)*$/.test(ville))
+    if (/^((?=.{3,}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(ville))
     {
-      return (true)
+      document.getElementById("cityErrorMsg").innerHTML = "";
+      return true;
     }
     document.getElementById("cityErrorMsg").innerHTML = "La ville n'est pas dans le bon format.";
-    return (false)
   });
 
   var email_query = document.getElementById("email");
-  email_query.addEventListener('change', (event) => {
+  email_query.addEventListener('input', (event) => {
     //on récupère l'email
     email = event.target.value;
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
     {
-      return (true)
+      document.getElementById("emailErrorMsg").innerHTML = "";
+      return true;
     }
     document.getElementById("emailErrorMsg").innerHTML = "L'adresse email n'est pas dans le bon format.";
-    return (false)
   });
 
   //lors du clic sur le bouton Envoyer, toutes les données sont récupérées
