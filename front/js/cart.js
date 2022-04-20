@@ -132,30 +132,32 @@ function updatePanier(){
 function getFormContact()
 {
   var prenom_query = document.getElementById("firstName");
-  prenom_query.addEventListener('change', (event) => {
+  prenom_query.addEventListener('input', (event) => {
     //on récupère le prénom
     prenom = event.target.value;
-    if (/^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i.test(prenom))
+    if(/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(prenom))
     {
+      document.getElementById("firstNameErrorMsg").innerHTML = "";
       return true;
     }
     else{
       document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
-      return (false)
+
     }
   });
 
   var nom_query = document.getElementById("lastName");
-  nom_query.addEventListener('change', (event) => {
+  nom_query.addEventListener('input', (event) => {
     //on récupère le nom
     nom = event.target.value;
-    //prob??????????????? -> rajouter les accents
-    if (/^(([ ,.'-](?<!( {2}|[,.'-]{2})))*[A-Za-z])+[ ,.'-]?$/i.test(nom))
+    if(/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(nom))
     {
-      return (true)
+      document.getElementById("lastNameErrorMsg").innerHTML = "";
+      return true;
     }
-    document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
-    return (false)
+    else{
+      document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
+    }
   });
 
   var adresse_query = document.getElementById("address");
