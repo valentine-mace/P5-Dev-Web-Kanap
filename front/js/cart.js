@@ -155,11 +155,15 @@ function displayPanier() {
           adresse_query.addEventListener('input', (event) => {
             //on récupère l'adresse
             adresse = event.target.value;
-            if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
-              document.getElementById("addressErrorMsg").innerHTML = "";
-              return true;
+            if(adresse){
+              if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
+                document.getElementById("addressErrorMsg").innerHTML = "";
+                return true;
+              }
+            }else{
+              document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
             }
-            document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
+            
           });
 
           var ville_query = document.getElementById("city");
@@ -195,44 +199,57 @@ function displayPanier() {
               city: ville_query.value,
               email: email_query.value
             }
-            let products_array = JSON.parse(localStorage.getItem("obj"));
-            //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
-            if (products_array.length !== 0) {
-              let array = [];
-              products_array.forEach(objet => {
-                array.push(objet.produit_id);
-              });
-              let jsonToPost = {
-                contact: contact_form,
-                products: array
+            const isNullish = Object.values(contact_form).every(value => {
+              if (value === null) {
+                return true;
               }
-              fetch("http://localhost:3000/api/products/order", {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(jsonToPost),
-              })
-                .then(function (res) {
-                  if (res.ok) {
-                    return res.json();
-                  }
-                })
-                .then(function (response) {
-                  let orderId = response.orderId;
-                  document.location.href = `confirmation.html?orderId=${orderId}`;
-                })
-                //Making a catch to display an error if something went wrong
-                .catch(function (err) {
-                  console.log(err);
-                });
+              else{return false}
+            });
+            if(isNullish == false){
+              alert("Tous les champs doivent être remplis.");
             }
-            else {
-              alert("Le panier est vide.");
+            else{
+              let products_array = JSON.parse(localStorage.getItem("obj"));
+              //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
+              if (products_array.length !== 0) {
+                let array = [];
+                products_array.forEach(objet => {
+                  array.push(objet.produit_id);
+                });
+                let jsonToPost = {
+                  contact: contact_form,
+                  products: array
+                }
+                fetch("http://localhost:3000/api/products/order", {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(jsonToPost),
+                })
+                  .then(function (res) {
+                    if (res.ok) {
+                      return res.json();
+                    }
+                  })
+                  .then(function (response) {
+                    let orderId = response.orderId;
+                    document.location.href = `confirmation.html?orderId=${orderId}`;
+                  })
+                  //Making a catch to display an error if something went wrong
+                  .catch(function (err) {
+                    console.log(err);
+                  });
+              }
+              else 
+              {
+                alert("Le panier est vide.");
+              }
             }
 
           });
+        
         }
 
         updatePanier();
