@@ -203,7 +203,10 @@ function displayPanier() {
               if (value === null) {
                 return true;
               }
-              else{return false}
+              else
+              {
+                return false;
+              }
             });
             if(isNullish == false){
               alert("Tous les champs doivent être remplis.");
@@ -247,7 +250,6 @@ function displayPanier() {
                 alert("Le panier est vide.");
               }
             }
-
           });
         
         }
