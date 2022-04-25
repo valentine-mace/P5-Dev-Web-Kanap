@@ -26,6 +26,7 @@ function displayPanier() {
     {
       //récupérer les données du produit
       let product_price = value.price;
+    });
       //on les intègre dans l'HTML
       contenu = contenu +
         "<article class=cart__item data-id=" + product_id + "data-color =" + product_color + ">" +
@@ -199,6 +200,7 @@ function displayPanier() {
               city: ville_query.value,
               email: email_query.value
             }
+            let products_array = JSON.parse(localStorage.getItem("obj"));
             const isNullish = Object.values(contact_form).every(value => {
               if (value === null) {
                 return true;
@@ -211,8 +213,10 @@ function displayPanier() {
             if(isNullish == false){
               alert("Tous les champs doivent être remplis.");
             }
+            if(products_array.length == 0){
+              alert("Le panier ne peut pas être.");
+            }
             else{
-              let products_array = JSON.parse(localStorage.getItem("obj"));
               //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
               if (products_array.length !== 0) {
                 let array = [];
@@ -258,8 +262,6 @@ function displayPanier() {
         modifPanier();
         suppPanier();
         getFormContact();
-
-    });
 
   });
 }
