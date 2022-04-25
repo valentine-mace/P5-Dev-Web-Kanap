@@ -26,7 +26,6 @@ function displayPanier() {
     {
       //récupérer les données du produit
       let product_price = value.price;
-    });
       //on les intègre dans l'HTML
       contenu = contenu +
         "<article class=cart__item data-id=" + product_id + "data-color =" + product_color + ">" +
@@ -262,7 +261,8 @@ function displayPanier() {
         modifPanier();
         suppPanier();
         getFormContact();
-
+        
+    });
   });
 }
 
