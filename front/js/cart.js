@@ -6,6 +6,16 @@ let contenu = "";
 let quantite_totale = 0;
 let prix_total = 0;
 
+function checkCart(){
+  if(panier){
+    getData();
+  }
+  else{
+    alert("Votre panier est vide.");
+    return false;
+  }
+}
+
 //récupération du prix non stocké et de l'ID
 function getData(){
   panier.forEach(element => {
@@ -222,8 +232,6 @@ function getFormContact() {
       email: email_query.value
     }
     let products_array = JSON.parse(localStorage.getItem("obj"));
-    //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
-    if (products_array.length !== 0) {
       let array = [];
       products_array.forEach(objet => {
         array.push(objet.produit_id);
@@ -253,16 +261,13 @@ function getFormContact() {
         .catch(function (err) {
           console.log(err);
         });
-    }
-    else 
-    {
-      alert("Le panier est vide.");
-    }
+    
   });
 
 }
 
-getData();
+checkCart();
+
 
 
 
