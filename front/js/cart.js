@@ -64,6 +64,7 @@ function displayPanier(element,value) {
     updatePanier(element,product_price);
     modifPanier();
     suppPanier();
+    getFormContact();
       
 }
 
@@ -132,152 +133,148 @@ function suppPanier() {
   });
 }
 
+//formulaire de contact - récupération des données rentrées par l'utilisateur
+function getFormContact() {
+  var prenom_query = document.getElementById("firstName");
+  prenom_query.addEventListener('input', (event) => {
+    //on récupère le prénom
+    prenom = event.target.value;
+    if (/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(prenom)) {
+      document.getElementById("firstNameErrorMsg").innerHTML = "";
+      return true;
+    }
+    else {
+      document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
+    }
+  });
+
+  var nom_query = document.getElementById("lastName");
+  nom_query.addEventListener('input', (event) => {
+    //on récupère le nom
+    nom = event.target.value;
+    if (/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(nom)) {
+      document.getElementById("lastNameErrorMsg").innerHTML = "";
+      return true;
+    }
+    else {
+      document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
+    }
+  });
+
+  var adresse_query = document.getElementById("address");
+  adresse_query.addEventListener('input', (event) => {
+    //on récupère l'adresse
+    adresse = event.target.value;
+    if(adresse){
+      if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
+        document.getElementById("addressErrorMsg").innerHTML = "";
+        return true;
+      }
+    }else{
+      document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
+    }
+    
+  });
+
+  var ville_query = document.getElementById("city");
+  ville_query.addEventListener('input', (event) => {
+    //on récupère la ville
+    ville = event.target.value;
+    if (/^((?=.{3,}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(ville)) {
+      document.getElementById("cityErrorMsg").innerHTML = "";
+      return true;
+    }
+    document.getElementById("cityErrorMsg").innerHTML = "La ville n'est pas dans le bon format.";
+  });
+
+  var email_query = document.getElementById("email");
+  email_query.addEventListener('input', (event) => {
+    //on récupère l'email
+    email = event.target.value;
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      document.getElementById("emailErrorMsg").innerHTML = "";
+      return true;
+    }
+    document.getElementById("emailErrorMsg").innerHTML = "L'adresse email n'est pas dans le bon format.";
+  });
+
+  //lors du clic sur le bouton Envoyer, toutes les données sont récupérées
+  var order = document.getElementById("order");
+  order.addEventListener('click', () => {
+    let contact_form =
+    {
+      firstName: prenom_query.value,
+      lastName: nom_query.value,
+      address: adresse_query.value,
+      city: ville_query.value,
+      email: email_query.value
+    }
+    let products_array = JSON.parse(localStorage.getItem("obj"));
+    const isNullish = Object.values(contact_form).every(value => {
+      if (value === null) {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    });
+    if(isNullish == false){
+      alert("Tous les champs doivent être remplis.");
+    }
+    if(products_array.length == 0){
+      alert("Le panier ne peut pas être.");
+    }
+    else{
+      //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
+      if (products_array.length !== 0) {
+        let array = [];
+        products_array.forEach(objet => {
+          array.push(objet.produit_id);
+        });
+        let jsonToPost = {
+          contact: contact_form,
+          products: array
+        }
+        fetch("http://localhost:3000/api/products/order", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonToPost),
+        })
+          .then(function (res) {
+            if (res.ok) {
+              return res.json();
+            }
+          })
+          .then(function (response) {
+            let orderId = response.orderId;
+            document.location.href = `confirmation.html?orderId=${orderId}`;
+          })
+          //Making a catch to display an error if something went wrong
+          .catch(function (err) {
+            console.log(err);
+          });
+      }
+      else 
+      {
+        alert("Le panier est vide.");
+      }
+    }
+  });
+
+}
+
 getData();
 
 
 
 
 
-//         //formulaire de contact - récupération des données rentrées par l'utilisateur
-//         function getFormContact() {
-//           var prenom_query = document.getElementById("firstName");
-//           prenom_query.addEventListener('input', (event) => {
-//             //on récupère le prénom
-//             prenom = event.target.value;
-//             if (/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(prenom)) {
-//               document.getElementById("firstNameErrorMsg").innerHTML = "";
-//               return true;
-//             }
-//             else {
-//               document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
-//             }
-//           });
 
-//           var nom_query = document.getElementById("lastName");
-//           nom_query.addEventListener('input', (event) => {
-//             //on récupère le nom
-//             nom = event.target.value;
-//             if (/^((?=.{1,50}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(nom)) {
-//               document.getElementById("lastNameErrorMsg").innerHTML = "";
-//               return true;
-//             }
-//             else {
-//               document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
-//             }
-//           });
 
-//           var adresse_query = document.getElementById("address");
-//           adresse_query.addEventListener('input', (event) => {
-//             //on récupère l'adresse
-//             adresse = event.target.value;
-//             if(adresse){
-//               if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
-//                 document.getElementById("addressErrorMsg").innerHTML = "";
-//                 return true;
-//               }
-//             }else{
-//               document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
-//             }
-            
-//           });
-
-//           var ville_query = document.getElementById("city");
-//           ville_query.addEventListener('input', (event) => {
-//             //on récupère la ville
-//             ville = event.target.value;
-//             if (/^((?=.{3,}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(ville)) {
-//               document.getElementById("cityErrorMsg").innerHTML = "";
-//               return true;
-//             }
-//             document.getElementById("cityErrorMsg").innerHTML = "La ville n'est pas dans le bon format.";
-//           });
-
-//           var email_query = document.getElementById("email");
-//           email_query.addEventListener('input', (event) => {
-//             //on récupère l'email
-//             email = event.target.value;
-//             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-//               document.getElementById("emailErrorMsg").innerHTML = "";
-//               return true;
-//             }
-//             document.getElementById("emailErrorMsg").innerHTML = "L'adresse email n'est pas dans le bon format.";
-//           });
-
-//           //lors du clic sur le bouton Envoyer, toutes les données sont récupérées
-//           var order = document.getElementById("order");
-//           order.addEventListener('click', () => {
-//             let contact_form =
-//             {
-//               firstName: prenom_query.value,
-//               lastName: nom_query.value,
-//               address: adresse_query.value,
-//               city: ville_query.value,
-//               email: email_query.value
-//             }
-//             let products_array = JSON.parse(localStorage.getItem("obj"));
-//             const isNullish = Object.values(contact_form).every(value => {
-//               if (value === null) {
-//                 return true;
-//               }
-//               else
-//               {
-//                 return false;
-//               }
-//             });
-//             if(isNullish == false){
-//               alert("Tous les champs doivent être remplis.");
-//             }
-//             if(products_array.length == 0){
-//               alert("Le panier ne peut pas être.");
-//             }
-//             else{
-//               //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
-//               if (products_array.length !== 0) {
-//                 let array = [];
-//                 products_array.forEach(objet => {
-//                   array.push(objet.produit_id);
-//                 });
-//                 let jsonToPost = {
-//                   contact: contact_form,
-//                   products: array
-//                 }
-//                 fetch("http://localhost:3000/api/products/order", {
-//                   method: "POST",
-//                   headers: {
-//                     Accept: "application/json",
-//                     "Content-Type": "application/json",
-//                   },
-//                   body: JSON.stringify(jsonToPost),
-//                 })
-//                   .then(function (res) {
-//                     if (res.ok) {
-//                       return res.json();
-//                     }
-//                   })
-//                   .then(function (response) {
-//                     let orderId = response.orderId;
-//                     document.location.href = `confirmation.html?orderId=${orderId}`;
-//                   })
-//                   //Making a catch to display an error if something went wrong
-//                   .catch(function (err) {
-//                     console.log(err);
-//                   });
-//               }
-//               else 
-//               {
-//                 alert("Le panier est vide.");
-//               }
-//             }
-//           });
-        
-//         }
-
-//         updatePanier();
-//         modifPanier();
-//         suppPanier();
-//         getFormContact();
-
-// //displayPanier();
 
 
 
