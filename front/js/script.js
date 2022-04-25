@@ -1,3 +1,4 @@
+// URL de la BDD
 let myURL = "http://localhost:3000/api/products";
 
 //récupération de toutes les données de la base de données
