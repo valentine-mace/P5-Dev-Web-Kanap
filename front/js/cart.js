@@ -145,6 +145,9 @@ function getFormContact() {
       document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom n'est pas dans le bon format.";
     }
   });
+  if (prenom_query.value === ""){
+    document.getElementById("firstNameErrorMsg").innerHTML = "Ce champ ne peut pas être vide.";
+  }
 
   var nom_query = document.getElementById("lastName");
   nom_query.addEventListener('input', (event) => {
@@ -158,21 +161,25 @@ function getFormContact() {
       document.getElementById("lastNameErrorMsg").innerHTML = "Le nom n'est pas dans le bon format.";
     }
   });
+  if (nom_query.value === ""){
+    document.getElementById("lastNameErrorMsg").innerHTML = "Ce champ ne peut pas être vide.";
+  }
 
   var adresse_query = document.getElementById("address");
   adresse_query.addEventListener('input', (event) => {
     //on récupère l'adresse
     adresse = event.target.value;
-    if(adresse){
-      if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
-        document.getElementById("addressErrorMsg").innerHTML = "";
-        return true;
-      }
-    }else{
-      document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
+    if (/^[a-zàáâäçèéêëìíîïñòóôöùúûüA-Z0-9\s,.'-]{3,}$/.test(adresse)) {
+      document.getElementById("addressErrorMsg").innerHTML = "";
+      return true;
     }
-    
+    else{
+    document.getElementById("addressErrorMsg").innerHTML = "L'adresse n'est pas dans le bon format.";
+    }
   });
+  if (adresse_query.value === ""){
+    document.getElementById("addressErrorMsg").innerHTML = "Ce champ ne peut pas être vide.";
+  }
 
   var ville_query = document.getElementById("city");
   ville_query.addEventListener('input', (event) => {
@@ -181,9 +188,13 @@ function getFormContact() {
     if (/^((?=.{3,}$)[a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/i.test(ville)) {
       document.getElementById("cityErrorMsg").innerHTML = "";
       return true;
-    }
+    }else{
     document.getElementById("cityErrorMsg").innerHTML = "La ville n'est pas dans le bon format.";
+    }
   });
+  if (ville_query.value === ""){
+    document.getElementById("cityErrorMsg").innerHTML = "Ce champ ne peut pas être vide.";
+  }
 
   var email_query = document.getElementById("email");
   email_query.addEventListener('input', (event) => {
@@ -195,6 +206,9 @@ function getFormContact() {
     }
     document.getElementById("emailErrorMsg").innerHTML = "L'adresse email n'est pas dans le bon format.";
   });
+  if (email_query.value === ""){
+    document.getElementById("emailErrorMsg").innerHTML = "Ce champ ne peut pas être vide.";
+  }
 
   //lors du clic sur le bouton Envoyer, toutes les données sont récupérées
   var order = document.getElementById("order");
@@ -208,58 +222,42 @@ function getFormContact() {
       email: email_query.value
     }
     let products_array = JSON.parse(localStorage.getItem("obj"));
-    const isEmpty = Object.values(contact_form).every(x => (x === null || x === ''));
-    // const isNullish = Object.values(contact_form).every(value => {
-    //   if (value === null) {
-    //     return true;
-    //   }
-    //   else
-    //   {
-    //     return false;
-    //   }
-    // });
-    console.log(isEmpty);
-    if(isEmpty == true){
-      alert("Tous les champs doivent être remplis.");
+    //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
+    if (products_array.length !== 0) {
+      let array = [];
+      products_array.forEach(objet => {
+        array.push(objet.produit_id);
+      });
+      let jsonToPost = {
+        contact: contact_form,
+        products: array
+      }
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jsonToPost),
+      })
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then(function (response) {
+          let orderId = response.orderId;
+          document.location.href = `confirmation.html?orderId=${orderId}`;
+        })
+        //Making a catch to display an error if something went wrong
+        .catch(function (err) {
+          console.log(err);
+        });
     }
-    // else{
-    //   //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
-    //   if (products_array.length !== 0) {
-    //     let array = [];
-    //     products_array.forEach(objet => {
-    //       array.push(objet.produit_id);
-    //     });
-    //     let jsonToPost = {
-    //       contact: contact_form,
-    //       products: array
-    //     }
-    //     fetch("http://localhost:3000/api/products/order", {
-    //       method: "POST",
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(jsonToPost),
-    //     })
-    //       .then(function (res) {
-    //         if (res.ok) {
-    //           return res.json();
-    //         }
-    //       })
-    //       .then(function (response) {
-    //         let orderId = response.orderId;
-    //         document.location.href = `confirmation.html?orderId=${orderId}`;
-    //       })
-    //       //Making a catch to display an error if something went wrong
-    //       .catch(function (err) {
-    //         console.log(err);
-    //       });
-    //   }
-    //   else 
-    //   {
-    //     alert("Le panier est vide.");
-    //   }
-    // }
+    else 
+    {
+      alert("Le panier est vide.");
+    }
   });
 
 }
