@@ -99,8 +99,6 @@ function modifPanier() {
             .concat(objectNewQuantity);
           let produit_json = JSON.stringify(newPanier);
           localStorage.setItem("obj", produit_json);
-          //on met à jour le prix et quantité totaux avec les nouvelles valeurs
-          //updatePanier();
           window.location.reload();
         }
         else {
@@ -210,59 +208,58 @@ function getFormContact() {
       email: email_query.value
     }
     let products_array = JSON.parse(localStorage.getItem("obj"));
-    const isNullish = Object.values(contact_form).every(value => {
-      if (value === null) {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    });
-    if(isNullish == false){
+    const isEmpty = Object.values(contact_form).every(x => (x === null || x === ''));
+    // const isNullish = Object.values(contact_form).every(value => {
+    //   if (value === null) {
+    //     return true;
+    //   }
+    //   else
+    //   {
+    //     return false;
+    //   }
+    // });
+    console.log(isEmpty);
+    if(isEmpty == true){
       alert("Tous les champs doivent être remplis.");
     }
-    if(products_array.length == 0){
-      alert("Le panier ne peut pas être.");
-    }
-    else{
-      //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
-      if (products_array.length !== 0) {
-        let array = [];
-        products_array.forEach(objet => {
-          array.push(objet.produit_id);
-        });
-        let jsonToPost = {
-          contact: contact_form,
-          products: array
-        }
-        fetch("http://localhost:3000/api/products/order", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(jsonToPost),
-        })
-          .then(function (res) {
-            if (res.ok) {
-              return res.json();
-            }
-          })
-          .then(function (response) {
-            let orderId = response.orderId;
-            document.location.href = `confirmation.html?orderId=${orderId}`;
-          })
-          //Making a catch to display an error if something went wrong
-          .catch(function (err) {
-            console.log(err);
-          });
-      }
-      else 
-      {
-        alert("Le panier est vide.");
-      }
-    }
+    // else{
+    //   //condition: vérifier que le panier n'est pas vide avant de pouvoir soumettre le formulaire
+    //   if (products_array.length !== 0) {
+    //     let array = [];
+    //     products_array.forEach(objet => {
+    //       array.push(objet.produit_id);
+    //     });
+    //     let jsonToPost = {
+    //       contact: contact_form,
+    //       products: array
+    //     }
+    //     fetch("http://localhost:3000/api/products/order", {
+    //       method: "POST",
+    //       headers: {
+    //         Accept: "application/json",
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(jsonToPost),
+    //     })
+    //       .then(function (res) {
+    //         if (res.ok) {
+    //           return res.json();
+    //         }
+    //       })
+    //       .then(function (response) {
+    //         let orderId = response.orderId;
+    //         document.location.href = `confirmation.html?orderId=${orderId}`;
+    //       })
+    //       //Making a catch to display an error if something went wrong
+    //       .catch(function (err) {
+    //         console.log(err);
+    //       });
+    //   }
+    //   else 
+    //   {
+    //     alert("Le panier est vide.");
+    //   }
+    // }
   });
 
 }
